@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskList - VictorP</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/index.js"></script>
+</head>
+<body>
+    <h1>tasklist</h1>
+    <ul>
+        <li>test task</li>
+    </ul>
+    <button onclick="afegir()"> Afegir</button>
+    
+    <script>
+        function afegir() {
+            // demana al usuari el nom de la tasca
+            text = prompt('Introdueix el nom de la tasca');
+            elem = $('<li>' + text + '</li>');
+            $('ul').append(elem);
+        }
+    </script>
+
+</body>
+</html>
