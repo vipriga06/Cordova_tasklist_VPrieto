@@ -1,27 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskList - VictorP</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/index.js"></script>
+  <meta charset="utf-8">
+  <title>Llista de tasques amb Diàleg</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 </head>
 <body>
-    <h1>tasklist</h1>
-    <ul>
-        <li>test task</li>
-    </ul>
-    <button onclick="afegir()"> Afegir</button>
-    
-    <script>
-        function afegir() {
-            // demana al usuari el nom de la tasca
-            text = prompt('Introdueix el nom de la tasca');
-            elem = $('<li>' + text + '</li>');
-            $('ul').append(elem);
-        }
-    </script>
+  <h1>Llista de tasques</h1>
+  <ul id="taskList"></ul>
+  <button id="btnAdd">Afegir tasca</button>
+  <div id="taskDialog" title="Afegir tasca" style="display:none;">
+    <input id="taskText" type="text">
+  </div>
+  <script>
+    $(function(){
+      function addTask(text){
+        var $li = $('<li>').text(text+' ');
+        var $editBtn = $('<button>Edita</button>').click(function(){
+          if($li.find('input').length) return;
+          $editBtn.hide();
+          $delBtn.hide();
+          var $input = $('<input type="text">').val($li.contents().get(0).nodeValue.trim());
+          var $saveBtn = $('<button>Desa</button>').click(function(){
+            var newText = $input.val().trim();
+            if(newText){
+              $li.contents().get(0).nodeValue = newText + ' ';
+            }
+            $input.remove();
+            $saveBtn.remove();
+            $editBtn.show();
+            $delBtn.show();
+          });
+          $li.prepend(' ').prepend($input).append(' ').append($saveBtn);
+        });
+        var $delBtn = $('<button>Esborrar</button>').click(function(){
+          $li.remove();
+        });
+        $li.append($editBtn).append(' ').append($delBtn);
+        $('#taskList').append($li);
+      }
 
+      $('#btnAdd').click(function(){
+        $('#taskText').val('');
+        $('#taskDialog').dialog({
+          modal:true,
+          buttons:{
+            "Desar": function(){
+              var text = $('#taskText').val().trim();
+              if(text) addTask(text);
+              $(this).dialog('close');
+            },
+            "Cancel·lar": function(){
+              $(this).dialog('close');
+            }
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
