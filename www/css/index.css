@@ -1,7 +1,5 @@
-/* Tailwind cubre la mayoría de estilos. Mantener reglas mínimas para compatibilidad. */
-/* Reset ligero para que los <ul> no tengan padding heredado si Tailwind CDN no está disponible */
+
 ul{list-style:none;padding:0;margin:0}
 
-/* Small helper: keep base font-family consistent */
 :root{--app-font:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
 body{font-family:var(--app-font)}
