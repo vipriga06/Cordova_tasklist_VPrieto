@@ -1,27 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskList - VictorP</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/index.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tasklist - VP</title>
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <h1>tasklist</h1>
-    <ul>
-        <li>test task</li>
-    </ul>
-    <button onclick="afegir()"> Afegir</button>
-    
-    <script>
-        function afegir() {
-            // demana al usuari el nom de la tasca
-            text = prompt('Introdueix el nom de la tasca');
-            elem = $('<li>' + text + '</li>');
-            $('ul').append(elem);
-        }
-    </script>
 
+    <h1>Tasklist - Victor Prieto</h1>
+    <ul id="llista">
+        <li>tasca de prova</li>
+    </ul>
+    <button id="btnAfegir">Afegir</button>
+
+    <script>
+            function afegir(){
+                var nom = prompt('Introdueix el nom de la tasca');
+                if(!nom) return; 
+                var li = document.createElement('li');
+                li.textContent = nom;
+                document.getElementById('llista').appendChild(li);
+            }
+
+            document.getElementById('btnAfegir').onclick = afegir;
+
+            // Desactivar la rueda del ratón solo en la lista
+            document.getElementById('llista').addEventListener('wheel', function(e) {
+                e.preventDefault();
+            }, { passive: false });
+    </script>
 </body>
 </html>
