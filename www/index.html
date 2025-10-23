@@ -5,30 +5,135 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tasklist - VP</title>
     <link rel="stylesheet" href="css/index.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .ui-dialog { background: #1e293b !important; border: 1px solid #475569 !important; border-radius: 12px !important; box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important; }
+        .ui-dialog .ui-dialog-titlebar { background: #0f172a !important; color: #f1f5f9 !important; border: none !important; border-radius: 12px 12px 0 0 !important; padding: 12px 16px !important; }
+        .ui-dialog .ui-dialog-content { background: #1e293b !important; color: #e2e8f0 !important; padding: 20px !important; }
+        .ui-dialog .ui-dialog-buttonpane { background: #1e293b !important; border: none !important; padding: 12px 16px !important; }
+        .ui-dialog .ui-button { background: #0ea5e9 !important; color: white !important; border: none !important; border-radius: 8px !important; padding: 8px 16px !important; font-weight: 600 !important; }
+        .ui-dialog .ui-button:hover { background: #0284c7 !important; }
+        .ui-dialog input[type="text"] { width: 100%; padding: 10px; border: 1px solid #475569; border-radius: 8px; background: #0f172a; color: #f1f5f9; font-size: 14px; }
+        .ui-dialog input[type="text"]:focus { outline: none; border-color: #0ea5e9; }
+    </style>
 </head>
-<body>
+<body class="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex flex-col items-center text-slate-100">
 
-    <h1>Tasklist - Victor Prieto</h1>
-    <ul id="llista">
-        <li>tasca de prova</li>
+    <h1 class="text-2xl text-center py-4 font-bold tracking-wide drop-shadow-lg">Tasklist - Victor Prieto</h1>
+    <ul id="llista" class="w-full max-w-md bg-slate-900 rounded-2xl shadow-2xl border border-slate-700 m-4 p-3 list-none">
+        <li class="p-3 my-3 w-11/12 min-h-[40px] rounded-xl bg-slate-800 border border-slate-700 shadow-md flex items-center justify-between">tasca de prova</li>
     </ul>
-    <button id="btnAfegir">Afegir</button>
+    <button id="btnAfegir" class="text-white bg-sky-600 hover:bg-sky-700 rounded-full px-6 py-2 mx-auto mb-3 font-semibold shadow-lg transition-all duration-200 hover:scale-105">Afegir Tasca</button>
+
+    <div id="dialogAfegir" title="Afegir Tasca" style="display:none;">
+        <label for="inputNovaTasca" class="block mb-2 text-sm font-medium">Nom de la tasca:</label>
+        <input type="text" id="inputNovaTasca" placeholder="Escriu el nom de la tasca..." />
+    </div>
+    <div id="dialogEditar" title="Editar Tasca" style="display:none;">
+        <label for="inputEditarTasca" class="block mb-2 text-sm font-medium">Edita la tasca:</label>
+        <input type="text" id="inputEditarTasca" placeholder="Escriu el nou nom..." />
+    </div>
 
     <script>
-            function afegir(){
-                var nom = prompt('Introdueix el nom de la tasca');
-                if(!nom) return; 
-                var li = document.createElement('li');
-                li.textContent = nom;
-                document.getElementById('llista').appendChild(li);
-            }
+        (function($){
+            $(function(){
+                var $llista = $('#llista');
+                var $btnAfegir = $('#btnAfegir');
+                var $dialogAfegir = $('#dialogAfegir');
+                var $dialogEditar = $('#dialogEditar');
+                var $inputNova = $('#inputNovaTasca');
+                var $inputEditar = $('#inputEditarTasca');
+                var currentEditSpan = null;
 
-            document.getElementById('btnAfegir').onclick = afegir;
+                // dialogos
+                $dialogAfegir.dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: 400,
+                    buttons: {
+                        "Afegir": function(){
+                            var nom = $inputNova.val().trim();
+                            if(nom){
+                                $llista.append(makeItem(nom));
+                                $inputNova.val('');
+                                $(this).dialog('close');
+                            }
+                        },
+                        "Cancel·lar": function(){
+                            $inputNova.val('');
+                            $(this).dialog('close');
+                        }
+                    }
+                });
 
-            // Desactivar la rueda del ratón solo en la lista
-            document.getElementById('llista').addEventListener('wheel', function(e) {
-                e.preventDefault();
-            }, { passive: false });
+                $dialogEditar.dialog({
+                    autoOpen: false,
+                    modal: true,
+                    width: 400,
+                    buttons: {
+                        "Desar": function(){
+                            var nouNom = $inputEditar.val().trim();
+                            if(nouNom && currentEditSpan){
+                                currentEditSpan.text(nouNom);
+                                currentEditSpan = null;
+                                $inputEditar.val('');
+                                $(this).dialog('close');
+                            }
+                        },
+                        "Cancel·lar": function(){
+                            currentEditSpan = null;
+                            $inputEditar.val('');
+                            $(this).dialog('close');
+                        }
+                    }
+                });
+
+                // aplicar estilo para el dialogo
+                function makeItem(text){
+                    var $li = $('<li></li>');
+                    $li.addClass('p-3 my-3 mx-auto w-11/12 min-h-[40px] rounded-xl bg-slate-800 border border-slate-700 shadow-lg flex items-center justify-between transform transition-all duration-200 hover:scale-105 hover:bg-slate-750');
+
+                    var $span = $('<span></span>').text(text).addClass('flex-1 text-slate-100 font-medium');
+                    var $btns = $('<div class="btns"></div>').addClass('flex items-center gap-2');
+                    var $edit = $('<button type="button">Editar</button>').addClass('bg-slate-700 hover:bg-slate-600 text-sky-400 rounded-full px-3 py-1 shadow-md font-medium transition-colors duration-200');
+                    var $del = $('<button type="button">Eliminar</button>').addClass('bg-red-700 hover:bg-red-600 text-white rounded-full px-3 py-1 shadow-md font-medium transition-colors duration-200');
+
+                    $edit.on('click', function(){
+                        currentEditSpan = $span;
+                        $inputEditar.val($span.text());
+                        $dialogEditar.dialog('open');
+                    });
+                    $del.on('click', function(){
+                        $li.fadeOut(300, function(){ $(this).remove(); });
+                    });
+
+                    $btns.append($edit, $del);
+                    $li.append($span).append($btns);
+                    return $li;
+                }
+
+                // inicializa los elementos que ya existen
+                function hydrate(){
+                    $llista.find('li').each(function(){
+                        var $this = $(this);
+                        if($this.find('.btns').length===0){
+                            var text = $this.text().trim();
+                            $this.replaceWith(makeItem(text));
+                        }
+                    });
+                }
+
+                $btnAfegir.on('click', function(){
+                    $dialogAfegir.dialog('open');
+                });
+
+                hydrate();
+            });
+        })(jQuery);
     </script>
+
 </body>
 </html>
