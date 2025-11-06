@@ -7,13 +7,17 @@
     <link rel="stylesheet" href="css/index.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>  
+        <!-- CSP simplificada: permitimos los CDNs de jQuery y estilos, mantenemos 'unsafe-inline' por requerimiento,
+            y eliminamos 'unsafe-eval' y el host ssl.gstatic.com que no se usa aquí. -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; script-src 'self' https://code.jquery.com 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://code.jquery.com; media-src *; img-src 'self' data:;">
 </head>
 <body>
 
     <h1>Tasklist - Victor Prieto</h1>
     <ul id="llista">
     </ul>
+
     <button id="btnAfegir">Afegir Tasca</button>
 
     <div id="dialogAfegir" title="Afegir Tasca" style="display:none;">
@@ -23,89 +27,8 @@
         <input type="text" id="inputEditarTasca" placeholder="Escriu el nou nom..." />
     </div>
 
-    <script>
-        $(function(){
-            var llista = $('#llista');
-            var KEY = 'tasques';
-            var editSpan = null;
-
-            function guardar(){
-                var tasques = llista.find('span').map(function(){ 
-                    return $(this).text(); 
-                }).get();
-                localStorage.setItem(KEY, JSON.stringify(tasques));
-            }
-
-            function cargar(){
-                var tasques = JSON.parse(localStorage.getItem(KEY) || '[]');
-                tasques.forEach(function(text){
-                    afegir(text);
-                });
-            }
-
-            function afegir(text){
-                var li = $('<li><span>' + text + '</span><div class="btns"><button>Editar</button><button>Eliminar</button></div></li>');
-                
-                li.find('button:first').click(function(){
-                    editSpan = li.find('span');
-                    $('#inputEditarTasca').val(editSpan.text());
-                    $('#dialogEditar').dialog('open');
-                });
-                
-                li.find('button:last').click(function(){
-                    li.fadeOut(300, function(){ 
-                        li.remove(); 
-                        guardar();
-                    });
-                });
-
-                llista.append(li);
-            }
-
-            $('#dialogAfegir').dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: {
-                    "Afegir": function(){
-                        var nom = $('#inputNovaTasca').val().trim();
-                        if(nom){
-                            afegir(nom);
-                            guardar();
-                            $('#inputNovaTasca').val('');
-                            $(this).dialog('close');
-                        }
-                    },
-                    "Cancel·lar": function(){
-                        $(this).dialog('close');
-                    }
-                }
-            });
-
-            $('#dialogEditar').dialog({
-                autoOpen: false,
-                modal: true,
-                buttons: {
-                    "Desar": function(){
-                        var nom = $('#inputEditarTasca').val().trim();
-                        if(nom && editSpan){
-                            editSpan.text(nom);
-                            guardar();
-                            $(this).dialog('close');
-                        }
-                    },
-                    "Cancel·lar": function(){
-                        $(this).dialog('close');
-                    }
-                }
-            });
-
-            $('#btnAfegir').click(function(){
-                $('#dialogAfegir').dialog('open');
-            });
-
-            cargar();
-        });
-    </script>
+    <!-- Script exportat degut al unsafe-inline -->
+    <script src="js/index.js"></script>
 
 </body>
 </html>

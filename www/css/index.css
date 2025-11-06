@@ -1,13 +1,15 @@
-/* Reset básico */
+/* Importar fuente Helvetica */
+@import url('https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@300;400;500;600;700&display=swap');
+
+/* Reset y estilos base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: #222;
     color: #fff;
     text-align: center;
@@ -15,157 +17,171 @@ body {
 }
 
 h1 {
-    font-size: 24px;
-    margin: 20px 0;
+    font-size: 36px;
+    margin-bottom: 20px;
 }
 
-/* Lista de tareas */
-#llista {
-    list-style: none;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto 20px;
-    background: #333;
-    padding: 20px;
-    border-radius: 16px;
+button {
+    margin: 5px;
+    padding: 8px;
+    font-size: 15px;
+    background: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover {
+    background: #0056d6;
+}
+
+ul {
+    margin: 5px auto 15px auto;
+    list-style-type: none;
+    padding: 0;
+    background-color: #3b3b3b;
+    border-radius: 24px;
+    overflow-y: auto;
+    max-height: 625px;
+    max-width: 450px;
+    scrollbar-width: none;
 }
 
 li {
     background: #444;
-    border: 1px solid #555;
-    border-radius: 12px;
-    padding: 15px;
-    margin: 12px 0;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-li span {
+.tasca-text {
     flex: 1;
     text-align: left;
-    margin-right: 15px;
-}
-
-/* Botones */
-button {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
-#btnAfegir {
-    background: #28a745;
-    padding: 12px 24px;
-    font-size: 16px;
-    margin: 20px 0;
+    padding-left: 12px;
+    word-break: break-word;
 }
 
 .btns {
-    display: flex;
-    gap: 8px;
+    margin-left: 10px;
 }
 
 .btns button {
-    padding: 8px 14px;
-    font-size: 13px;
+    margin-left: 6px;
 }
 
-.btns button:first-child {
-    background: #ffc107;
-    color: #000;
+/* Botón Afegir Tasca */
+#btnAfegir {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    max-width: 450px;
 }
 
-.btns button:last-child {
-    background: #dc3545;
+.ui-widget-overlay {
+    background: rgba(0, 0, 0, 0.6) !important;
 }
 
-/* Diálogos */
 .ui-dialog {
     background: #333 !important;
-    border: 1px solid #555 !important;
-    border-radius: 16px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
-.ui-dialog-titlebar {
-    background: #222 !important;
-    color: #fff !important;
+.ui-dialog .ui-dialog-titlebar {
+    background: #444 !important;
     border: none !important;
-    border-radius: 16px 16px 0 0 !important;
-    padding: 15px 20px !important;
-    font-size: 16px !important;
-    font-weight: 600 !important;
-}
-
-.ui-dialog-titlebar-close {
-    background: transparent !important;
-    border: none !important;
-    transition: all 0.3s !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 12px 40px 12px 15px !important;
     color: #fff !important;
 }
 
-.ui-dialog-titlebar-close:hover {
-    background: rgba(255,255,255,0.1) !important;
+.ui-dialog .ui-dialog-title {
+    font-size: 18px;
+    font-weight: 500;
 }
 
-.ui-dialog-content {
+.ui-dialog .ui-dialog-titlebar-close {
+    position: absolute !important;
+    right: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 28px !important;
+    height: 28px !important;
+    
+}
+
+.ui-dialog .ui-dialog-titlebar-close:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close .ui-icon {
+    display: none !important;
+    background: none !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close::after {
+    content: '×';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.ui-dialog .ui-dialog-content {
     background: #333 !important;
     color: #fff !important;
-    padding: 25px !important;
-}
-
-.ui-dialog-buttonpane {
-    background: #333 !important;
-    border: none !important;
     padding: 20px !important;
 }
 
-.ui-dialog-buttonpane .ui-button {
-    background: #007bff !important;
+.ui-dialog input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    background: #444;
+    border: 1px solid #555;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.ui-dialog input[type="text"]:focus {
+    border-color: #007BFF;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    background: #333 !important;
+    border: none !important;
+    padding: 10px 20px 15px 20px !important;
+    text-align: right !important;
+}
+
+.ui-dialog .ui-button {
+    background: #007BFF !important;
     color: #fff !important;
     border: none !important;
-    border-radius: 10px !important;
+    border-radius: 5px !important;
     padding: 8px 16px !important;
-    font-size: 14px !important;
-    transition: all 0.3s !important;
+    font-size: 15px !important;
+    cursor: pointer !important;
+    transition: background 0.2s ease !important;
 }
 
-.ui-dialog-buttonpane .ui-button:hover {
-    opacity: 0.8 !important;
+.ui-dialog .ui-button:hover {
+    background: #0056d6 !important;
 }
 
-.ui-dialog input {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    background: #222;
-    color: #fff;
-    border: 1px solid #555;
-    border-radius: 10px;
-    font-size: 14px;
+.ui-dialog .ui-button + .ui-button {
+    margin-left: 8px !important;
 }
 
-.ui-dialog input:focus {
-    outline: none;
-    border-color: #007bff;
-}
-
-.ui-dialog input::placeholder {
-    color: #888;
-}
-
-.ui-dialog label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #fff;
-}
